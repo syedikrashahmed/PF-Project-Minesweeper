@@ -13,10 +13,8 @@ typedef struct Cell
 int const cols = 10;
 int const rows = 10;
 
-int const cellWidth = 50;
-int const cellHeight = 50;
-const int screenWidth = 500;
-const int screenHeight = 500;
+int const cellSize = 50;
+const int screenSize = 500;
 
 
 void GridInitialize();
@@ -25,7 +23,7 @@ void GridInitialize();
 int main(void)
 {
 
-    InitWindow(screenWidth, screenHeight, "MINESWEEPER");
+    InitWindow(screenSize, screenSize, "MINESWEEPER");
   
 
     SetTargetFPS(60);               
@@ -35,6 +33,7 @@ int main(void)
         BeginDrawing();
 
             ClearBackground(MAROON);
+            GridInitialize();
 
         EndDrawing();
     }
@@ -42,22 +41,20 @@ int main(void)
 
     CloseWindow();  
 
-    GridInitialize();
     
     return 0;
 }
 
 void GridInitialize()
 {
-    for (int x = 0; x < screenWidth; x += 50) {
-            // Draw vertical lines
-            DrawLine(x, 0, x, screenHeight, GRAY);
+    for (int x = 0; x < cellSize; x ++) 
+    {
+        for (int y = 0; y < cellSize; y ++) 
+        {
+            
+            DrawRectangleLines(x*cellSize, y*cellSize, cellSize, cellSize, WHITE);
+            //taake screen ke har pixel pe lines na banen, cell size ke gap se banen
         }
-        
-        for (int y = 0; y < screenHeight; y += 50) {
-            // Draw horizontal lines
-            DrawLine(0, y, screenWidth, y, GRAY);
-        }
-
+    }
     
 }
