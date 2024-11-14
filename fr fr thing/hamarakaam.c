@@ -22,10 +22,7 @@ void GridInitialize();
 
 int main(void)
 {
-
     InitWindow(screenSize, screenSize, "MINESWEEPER");
-  
-
     SetTargetFPS(60);               
 
     while (!WindowShouldClose())   
@@ -38,10 +35,7 @@ int main(void)
         EndDrawing();
     }
 
-
-    CloseWindow();  
-
-    
+    CloseWindow();      
     return 0;
 }
 
@@ -50,11 +44,9 @@ void GridInitialize()
     for (int x = 0; x < cellSize; x ++) 
     {
         for (int y = 0; y < cellSize; y ++) 
-        {
-            
+        {          
             DrawRectangleLines(x*cellSize, y*cellSize, cellSize, cellSize, WHITE);
             //taake screen ke har pixel pe lines na banen, cell size ke gap se banen
         }
-    }
-    
+    }    
 }
