@@ -39,8 +39,9 @@ int main(void)
        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))   
             {
                 Vector2 mousePos = GetMousePosition();
-                int i = mousePos.x / 50;
-                int j = mousePos.y / 50;  
+                int mouseI = mousePos.x / 50;
+                int mouseJ = mousePos.y / 50;  
+                grid[mouseI][mouseJ].revealed = true;
             }                
            // else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))    
              //   rightPressed();
@@ -51,7 +52,7 @@ int main(void)
         
         for (int x = 0; x < 10; x ++) 
         {
-            for (int y = 0; y < 10; y ++) 
+            // for (int y = 0; y < 10; y ++) 
             {
                 revealCell(grid[x][y]);
             }
