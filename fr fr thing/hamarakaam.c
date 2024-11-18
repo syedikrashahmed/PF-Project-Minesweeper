@@ -21,7 +21,7 @@ int const rows = 10;
 int const cellSize = 50;
 const int screenSize = 500;
 
-
+int IndexIsValid(int i, int j);
 void GridInitialize();
 
 
@@ -51,6 +51,13 @@ int main(void)
     return 0;
 }
 
+int IndexIsValid(int i, int j)
+{
+    if (i>=0 && i<=9 && j>=0 && j<=9)
+        return 1;
+    else
+        return 0;
+}
 
 //x and y is array position(row and column)
 void GridInitialize()
