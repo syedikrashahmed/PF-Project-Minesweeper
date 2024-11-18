@@ -23,24 +23,40 @@ const int screenSize = 500;
 
 int IndexIsValid(int i, int j);
 void GridInitialize();
-
+void revealCell(cell); // aate wapis
 
 int main(void)
 {
 
     InitWindow(screenSize, screenSize, "MINESWEEPER");
-  
-
-    SetTargetFPS(60);   
-    srand(time(0));    
+ 
+    srand(time(0));  
+    GridInitialize();    
 
     while (!WindowShouldClose())   
     {
+       
+       if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))   
+            {
+                Vector2 mousePos = GetMousePosition();
+                int i = mousePos.x / 50;
+                int j = mousePos.y / 50;  
+            }                
+           // else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))    
+             //   rightPressed();
+       
         BeginDrawing();
 
-            ClearBackground(MAROON);
-            GridInitialize();
-
+        ClearBackground(LIGHTGRAY);
+        
+        for (int x = 0; x < 10; x ++) 
+        {
+            for (int y = 0; y < 10; y ++) 
+            {
+                revealCell(grid[x][y]);
+            }
+        }
+        
         EndDrawing();
     }
 
@@ -51,6 +67,29 @@ int main(void)
     return 0;
 }
 
+void revealCell(cell cell1)
+{
+
+    //taake screen ke har pixel pe lines na banen, cell size ke gap se banen
+    if (cell1.revealed == true && cell1.flagged == false)
+    {
+        if(cell1.bomb == true)
+        {
+            DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, MAROON);
+        }
+        else if(cell1.bomb == false)
+        {
+            DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, WHITE);
+            if (cell1.nearbyBombs != 0)
+                
+                DrawText(TextFormat("%d", cell1.nearbyBombs), cell1.x*50 + 18, cell1.y*50 + 12, 35, BLACK);
+        }
+    }
+    DrawRectangleLines(cell1.x*50, cell1.y*50, 50, 50, BLACK);
+}
+
+
+
 int IndexIsValid(int i, int j)
 {
     if (i>=0 && i<=9 && j>=0 && j<=9)
@@ -59,18 +98,11 @@ int IndexIsValid(int i, int j)
         return 0;
 }
 
+
 //x and y is array position(row and column)
 void GridInitialize()
 {
-    for (int x = 0; x < 10; x ++) 
-    {
-        for (int y = 0; y < 10; y ++) 
-        {
-            
-            DrawRectangleLines(x*cellSize, y*cellSize, cellSize, cellSize, WHITE);
-            //taake screen ke har pixel pe lines na banen, cell size ke gap se banen
-        }
-    }
+    
     
     for(int i = 0; i < 10; i ++)
     {
@@ -96,6 +128,37 @@ void GridInitialize()
         {
             grid[i][j].bomb = true;
             bombsToLaga--;
+        }
+    }
+    
+    for(int i = 0; i<10; i++)
+    {
+        for (int j = 0; j<10; j++)
+        {
+            int count = 0; //grid ke har box ko check karte huey usska inital count will be 0
+            if (grid[i][j].bomb == false)
+            {
+                //if bomb nai hai, count aaju baaju waale tiles mei bombs
+                for (int iOff = -1; iOff <= 1; iOff++)
+                {
+                    for (int jOff = -1; jOff <= 1; jOff++)
+                    {
+                        if (iOff == 0 && jOff == 0) //jis box ke around check kar rae hain, usse count nai karen ge
+                        {
+                            continue; 
+                        }
+                        if (!IndexIsValid(i + iOff, j + jOff)) // function defined later to check ke index out of bounds tou nai hai
+                        {
+                            continue;
+                        }
+                        if (grid[i + iOff][j + jOff].bomb)
+                        {
+                            count++;
+                        }
+                    }
+                }
+            }
+            grid[i][j].nearbyBombs = count;
         }
     }
 }
