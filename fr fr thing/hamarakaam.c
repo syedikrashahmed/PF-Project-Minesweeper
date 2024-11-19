@@ -17,8 +17,9 @@ cell grid[10][10];
 
 int const cols = 10;
 int const rows = 10;
+int revealedCount = 0;
 
-int const cellSize = 50;
+const int cellSize = 50;
 const int screenSize = 500;
 
 int IndexIsValid(int i, int j);
@@ -33,7 +34,6 @@ int main(void)
  
     srand(time(0));  
     GridInitialize();    
-
     while (!WindowShouldClose())   
     {
        
@@ -43,7 +43,10 @@ int main(void)
            int mouseI = mousePos.x / 50;
            int mouseJ = mousePos.y / 50;  
            if(grid[mouseI][mouseJ].flagged == false)
+           {
                grid[mouseI][mouseJ].revealed = true;
+
+           }
        }                
        else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))    
        {
@@ -51,23 +54,26 @@ int main(void)
            int mouseI = mousePos.x / 50;
            int mouseJ = mousePos.y / 50; 
            if(grid[mouseI][mouseJ].revealed == false)
-            grid[mouseI][mouseJ].flagged = !grid[mouseI][mouseJ].flagged;
+                  grid[mouseI][mouseJ].flagged = !grid[mouseI][mouseJ].flagged;
        }
+       
        
         BeginDrawing();
 
         ClearBackground(LIGHTGRAY);
         
-        for (int x = 0; x < 10; x ++) 
-        {
-            for (int y = 0; y < 10; y ++) 
+            for (int x = 0; x < 10; x ++) 
             {
-                revealCell(grid[x][y]);
+                for (int y = 0; y < 10; y ++) 
+                {
+                    revealCell(grid[x][y]);
+                }
             }
-        }
+        //if(revealedCount == 80)
+            //ClearBackground(DARKGREEN);
         
         EndDrawing();
-    } 0
+    }
 
 
     CloseWindow();  
