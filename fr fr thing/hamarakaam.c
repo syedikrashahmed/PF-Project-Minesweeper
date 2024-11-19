@@ -24,6 +24,7 @@ const int screenSize = 500;
 int IndexIsValid(int i, int j);
 void GridInitialize();
 void revealCell(cell); // aate wapis
+void PrintFlag(int i, int j);
 
 int main(void)
 {
@@ -37,14 +38,21 @@ int main(void)
     {
        
        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))   
-            {
-                Vector2 mousePos = GetMousePosition();
-                int mouseI = mousePos.x / 50;
-                int mouseJ = mousePos.y / 50;  
-                grid[mouseI][mouseJ].revealed = true;
-            }                
-           // else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))    
-             //   rightPressed();
+       {
+           Vector2 mousePos = GetMousePosition();
+           int mouseI = mousePos.x / 50;
+           int mouseJ = mousePos.y / 50;  
+           if(grid[mouseI][mouseJ].flagged == false)
+               grid[mouseI][mouseJ].revealed = true;
+       }                
+       else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))    
+       {
+           Vector2 mousePos = GetMousePosition();
+           int mouseI = mousePos.x / 50;
+           int mouseJ = mousePos.y / 50; 
+           if(grid[mouseI][mouseJ].revealed == false)
+            grid[mouseI][mouseJ].flagged = !grid[mouseI][mouseJ].flagged;
+       }
        
         BeginDrawing();
 
@@ -59,7 +67,7 @@ int main(void)
         }
         
         EndDrawing();
-    }
+    } 0
 
 
     CloseWindow();  
@@ -77,10 +85,7 @@ void revealCell(cell cell1)
         if(cell1.bomb == true)
         {
             DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, MAROON);
-            Vector2 v1 =  {10, 5};
-            Vector2 v2 =  {10, 30};
-            Vector2 v3 =  {40, 15};
-            DrawTriangle(v1, v2, v3, YELLOW); 
+            
         }
         else if(cell1.bomb == false)
         {
@@ -89,6 +94,10 @@ void revealCell(cell cell1)
                 
                 DrawText(TextFormat("%d", cell1.nearbyBombs), cell1.x*50 + 18, cell1.y*50 + 12, 35, BLACK);
         }
+    }
+    else if(cell1.revealed == false && cell1.flagged == true)
+    {
+        PrintFlag (cell1.x, cell1.y);
     }
     DrawRectangleLines(cell1.x*50, cell1.y*50, 50, 50, BLACK);
 }
@@ -103,6 +112,14 @@ int IndexIsValid(int i, int j)
         return 0;
 }
 
+void PrintFlag(int i, int j)
+{
+    Vector2 v1 =  {(i * 50) + 10, (j * 50) + 5};
+    Vector2 v2 =  {(i * 50) + 10, (j * 50) + 30};
+    Vector2 v3 =  {(i * 50) + 40, (j * 50) + 15};
+    DrawTriangle(v1, v2, v3, RED); 
+    DrawLine((i * 50) + 11, (j * 50) + 30, (i * 50) + 11, (j * 50) + 45, BLACK);
+}
 
 //x and y is array position(row and column)
 void GridInitialize()
