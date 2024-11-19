@@ -52,7 +52,7 @@ int main(void)
         
         for (int x = 0; x < 10; x ++) 
         {
-            // for (int y = 0; y < 10; y ++) 
+            for (int y = 0; y < 10; y ++) 
             {
                 revealCell(grid[x][y]);
             }
@@ -77,6 +77,10 @@ void revealCell(cell cell1)
         if(cell1.bomb == true)
         {
             DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, MAROON);
+            Vector2 v1 =  {10, 5};
+            Vector2 v2 =  {10, 30};
+            Vector2 v3 =  {40, 15};
+            DrawTriangle(v1, v2, v3, YELLOW); 
         }
         else if(cell1.bomb == false)
         {
