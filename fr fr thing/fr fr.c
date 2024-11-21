@@ -23,7 +23,7 @@ const int screenSize = 500;
 
 int IndexIsValid(int i, int j);
 void GridInitialize();
-void revealCell(cell); // aate wapis
+void revealCell(cell, int* revealedCount); // aate wapis
 void PrintFlag(int i, int j);
 
 int main(void)
@@ -71,16 +71,22 @@ int main(void)
         ClearBackground(LIGHTGRAY);
         
         if(gamestate == 0)
+        {  
             ClearBackground(MAROON);
+            DrawText("YOU LOSE =(", 100, 220, 50, WHITE); 
+        }
         else if(gamestate == 1)
+        {
             ClearBackground(DARKGREEN);
+            DrawText("YOU WIN =D", 100, 220, 50, WHITE); 
+        }
         else
         {
             for (int x = 0; x < 10; x ++) 
             {
                 for (int y = 0; y < 10; y ++) 
                 {
-                    revealCell(grid[x][y]);
+                    revealCell(grid[x][y], &revealedCount);
                 }
             }
         }
@@ -95,7 +101,7 @@ int main(void)
     return 0;
 }
 
-void revealCell(cell cell1)
+void revealCell(cell cell1, int* revealedCount)
 {
 
     //taake screen ke har pixel pe lines na banen, cell size ke gap se banen
@@ -108,10 +114,16 @@ void revealCell(cell cell1)
         }
         else if(cell1.bomb == false)
         {
-            DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, WHITE);
+            if(cell1.nearbyBombs == 0)
+            {
+                DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, WHITE);
+                                    
+            }
             if (cell1.nearbyBombs != 0)
-                
+            {    
+                DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, WHITE);
                 DrawText(TextFormat("%d", cell1.nearbyBombs), cell1.x*50 + 18, cell1.y*50 + 12, 35, BLACK);
+            }
         }
     }
     else if(cell1.revealed == false && cell1.flagged == true)
@@ -119,6 +131,28 @@ void revealCell(cell cell1)
         PrintFlag (cell1.x, cell1.y);
     }
     DrawRectangleLines(cell1.x*50, cell1.y*50, 50, 50, BLACK);
+
+    
+            if (grid[cell1.x][cell1.y].nearbyBombs == 0)
+            {
+                for (int iOff = -1; iOff <= 1; iOff++)
+                {
+                    for (int jOff = -1; jOff <= 1; jOff++)
+                    {
+                        if (iOff == 0 && jOff == 0) 
+                        {
+                            continue; 
+                        }
+                        if (IndexIsValid(cell1.x + iOff, cell1.y + jOff))
+                        {
+                            revealCell(grid[cell1.x + iOff][cell1.y + jOff], &revealedCount);
+                            *revealedCount++;
+                        }
+                    }
+                }
+            }
+        
+    
 }
 
 
