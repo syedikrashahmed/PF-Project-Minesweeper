@@ -23,21 +23,24 @@ const int screenSize = 500;
 
 int IndexIsValid(int i, int j);
 void GridInitialize();
-void revealCell(cell); // aate wapis
+void revealCell(cell); 
 void PrintFlag(int i, int j);
 
 int main(void)
 {
-
+    
     InitWindow(screenSize, screenSize, "MINESWEEPER");
   
     int gamestate = 2; //2 =game chalra, 1 = win, 0 = lost
     int revealedCount = 0;
     srand(time(0));  
-    GridInitialize();    
+    GridInitialize();  
+    InitAudioDevice();
+    Sound mineSound = LoadSound("mine.mp3");
+    Sound clickSound = LoadSound("click.mp3");
+
     while (!WindowShouldClose())   
     {
-       
        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))   
        {
            Vector2 mousePos = GetMousePosition();
@@ -46,6 +49,7 @@ int main(void)
            if(grid[mouseI][mouseJ].flagged == false && grid[mouseI][mouseJ].revealed == false)
            {
                 grid[mouseI][mouseJ].revealed = true;
+                PlaySound(clickSound);
                 if(grid[mouseI][mouseJ].bomb == false)
                 {
                     revealedCount++;
@@ -53,7 +57,10 @@ int main(void)
                         gamestate = 1;
                 }
                 if(grid[mouseI][mouseJ].bomb == true)
-                    gamestate = 0;
+                    {
+                        gamestate = 0;
+                        PlaySound(mineSound);
+                    }
            }
        }                
        else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))    
@@ -61,8 +68,11 @@ int main(void)
            Vector2 mousePos = GetMousePosition();
            int mouseI = mousePos.x / 50;
            int mouseJ = mousePos.y / 50; 
-           if(grid[mouseI][mouseJ].revealed == false)
-                  grid[mouseI][mouseJ].flagged = !grid[mouseI][mouseJ].flagged;
+           if(grid[mouseI][mouseJ].revealed == false)          
+            {
+                PlaySound(clickSound);
+                grid[mouseI][mouseJ].flagged = !grid[mouseI][mouseJ].flagged;
+            }
        }
        
        
@@ -94,7 +104,7 @@ int main(void)
         EndDrawing();
     }
 
-
+    CloseAudioDevice();
     CloseWindow();  
 
     
@@ -103,7 +113,6 @@ int main(void)
 
 void revealCell(cell cell1)
 {
-
     //taake screen ke har pixel pe lines na banen, cell size ke gap se banen
     if (cell1.revealed == true && cell1.flagged == false)
     {
@@ -114,17 +123,40 @@ void revealCell(cell cell1)
         }
         else if(cell1.bomb == false)
         {
-            DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, WHITE);
-            if (cell1.nearbyBombs != 0)
-                
+            if(cell1.nearbyBombs == 0)
+            {
+                DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, WHITE);
+                // for (int iOff = -1; iOff <= 1; iOff++)
+                // {
+                //     for (int jOff = -1; jOff <= 1; jOff++)
+                //     {
+                //         if (iOff == 0 && jOff == 0)
+                //         {
+                //             continue;
+                //         }
+
+                //         if (IndexIsValid(cell1.x + iOff, cell1.y + jOff))
+                //         {
+                //            revealCell(grid[cell1.x + iOff][cell1.y + jOff]);
+                //         }
+
+                        
+                //     }
+                // }                    
+            }
+            else if (cell1.nearbyBombs != 0)
+            {    
+                DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, WHITE);
                 DrawText(TextFormat("%d", cell1.nearbyBombs), cell1.x*50 + 18, cell1.y*50 + 12, 35, BLACK);
+            }
         }
     }
     else if(cell1.revealed == false && cell1.flagged == true)
     {
-        PrintFlag (cell1.x, cell1.y);
+        PrintFlag(cell1.x, cell1.y);
     }
     DrawRectangleLines(cell1.x*50, cell1.y*50, 50, 50, BLACK);
+    
 }
 
 
