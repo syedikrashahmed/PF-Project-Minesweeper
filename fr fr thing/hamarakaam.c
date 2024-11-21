@@ -17,7 +17,6 @@ cell grid[10][10];
 
 int const cols = 10;
 int const rows = 10;
-int revealedCount = 0;
 
 const int cellSize = 50;
 const int screenSize = 500;
@@ -31,7 +30,9 @@ int main(void)
 {
 
     InitWindow(screenSize, screenSize, "MINESWEEPER");
- 
+  
+    int gamestate = 2; //2 =game chalra, 1 = win, 0 = lost
+    int revealedCount = 0;
     srand(time(0));  
     GridInitialize();    
     while (!WindowShouldClose())   
@@ -42,10 +43,17 @@ int main(void)
            Vector2 mousePos = GetMousePosition();
            int mouseI = mousePos.x / 50;
            int mouseJ = mousePos.y / 50;  
-           if(grid[mouseI][mouseJ].flagged == false)
+           if(grid[mouseI][mouseJ].flagged == false && grid[mouseI][mouseJ].revealed == false)
            {
-               grid[mouseI][mouseJ].revealed = true;
-
+                grid[mouseI][mouseJ].revealed = true;
+                if(grid[mouseI][mouseJ].bomb == false)
+                {
+                    revealedCount++;
+                    if(revealedCount == 80)
+                        gamestate = 1;
+                }
+                if(grid[mouseI][mouseJ].bomb == true)
+                    gamestate = 0;
            }
        }                
        else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))    
@@ -62,6 +70,18 @@ int main(void)
 
         ClearBackground(LIGHTGRAY);
         
+        if(gamestate == 0)
+        {  
+            ClearBackground(MAROON);
+            DrawText("YOU LOSE =(", 100, 220, 50, WHITE); 
+        }
+        else if(gamestate == 1)
+        {
+            ClearBackground(DARKGREEN);
+            DrawText("YOU WIN =D", 100, 220, 50, WHITE); 
+        }
+        else
+        {
             for (int x = 0; x < 10; x ++) 
             {
                 for (int y = 0; y < 10; y ++) 
@@ -69,9 +89,8 @@ int main(void)
                     revealCell(grid[x][y]);
                 }
             }
-        //if(revealedCount == 80)
-            //ClearBackground(DARKGREEN);
-        
+        }
+
         EndDrawing();
     }
 
