@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
-
+//
 typedef struct Cell
 {
 	int x;
