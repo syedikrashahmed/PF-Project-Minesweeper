@@ -38,6 +38,7 @@ int main(void)
     InitAudioDevice();
     Sound mineSound = LoadSound("mine.mp3");
     Sound clickSound = LoadSound("click.mp3");
+    Sound clickFlag = LoadSound("flag.wav");
 
     while (!WindowShouldClose())   
     {
@@ -70,7 +71,7 @@ int main(void)
            int mouseJ = mousePos.y / 50; 
            if(grid[mouseI][mouseJ].revealed == false)          
             {
-                PlaySound(clickSound);
+                PlaySound(clickFlag);
                 grid[mouseI][mouseJ].flagged = !grid[mouseI][mouseJ].flagged;
             }
        }
