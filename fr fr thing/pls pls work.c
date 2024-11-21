@@ -23,12 +23,12 @@ const int screenSize = 500;
 
 int IndexIsValid(int i, int j);
 void GridInitialize();
-void revealCell(cell); // aate wapis
+void revealCell(cell); 
 void PrintFlag(int i, int j);
 
 int main(void)
 {
-
+    
     InitWindow(screenSize, screenSize, "MINESWEEPER");
   
     int gamestate = 2; //2 =game chalra, 1 = win, 0 = lost
@@ -103,7 +103,6 @@ int main(void)
 
 void revealCell(cell cell1)
 {
-
     //taake screen ke har pixel pe lines na banen, cell size ke gap se banen
     if (cell1.revealed == true && cell1.flagged == false)
     {
@@ -117,23 +116,25 @@ void revealCell(cell cell1)
             if(cell1.nearbyBombs == 0)
             {
                 DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, WHITE);
-                            for (int iOff = -1; iOff <= 1; iOff++)
-                            {
-                                for (int jOff = -1; jOff <= 1; jOff++)
-                                {
-                                    if (iOff == 0 && jOff == 0) //jis box ke around check kar rae hain, usse count nai karen ge
-                                    {
-                                        revealCell(grid[cell1.x + iOff][cell1.y + jOff]);
-                                    }
-                                    else if (!IndexIsValid(cell1.x + iOff, cell1.y + jOff)) // function defined later to check ke index out of bounds tou nai hai
-                                    {
-                                        continue;
-                                    }
-                                   
-                                }
-                            }               
+                // for (int iOff = -1; iOff <= 1; iOff++)
+                // {
+                //     for (int jOff = -1; jOff <= 1; jOff++)
+                //     {
+                //         if (iOff == 0 && jOff == 0)
+                //         {
+                //             continue;
+                //         }
+
+                //         if (IndexIsValid(cell1.x + iOff, cell1.y + jOff))
+                //         {
+                //            revealCell(grid[cell1.x + iOff][cell1.y + jOff]);
+                //         }
+
+                        
+                //     }
+                // }                    
             }
-            if (cell1.nearbyBombs != 0)
+            else if (cell1.nearbyBombs != 0)
             {    
                 DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, WHITE);
                 DrawText(TextFormat("%d", cell1.nearbyBombs), cell1.x*50 + 18, cell1.y*50 + 12, 35, BLACK);
@@ -142,9 +143,10 @@ void revealCell(cell cell1)
     }
     else if(cell1.revealed == false && cell1.flagged == true)
     {
-        PrintFlag (cell1.x, cell1.y);
+        PrintFlag(cell1.x, cell1.y);
     }
     DrawRectangleLines(cell1.x*50, cell1.y*50, 50, 50, BLACK);
+    
 }
 
 
