@@ -1,7 +1,8 @@
 # PF-Cool-Project
 ### pf very kool project 
 
-![image](https://github.com/user-attachments/assets/ee0f761e-377b-4b0c-9a9d-2fda7ec7e1a8)
+<img src="![image](https://github.com/user-attachments/assets/ee0f761e-377b-4b0c-9a9d-2fda7ec7e1a8)l" alt="Game" width="300">
+
 
 ![image](https://github.com/user-attachments/assets/66c29a01-f016-4b7c-9294-5fecabc77872)
 
