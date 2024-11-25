@@ -34,10 +34,18 @@ int main(void)
     int gamestate = 2; //2 =game chalra, 1 = win, 0 = lost
     int revealedCount = 0;
     srand(time(0));  
-    GridInitialize();    
+    GridInitialize();  
+    InitAudioDevice();
+    Sound mineSound = LoadSound("mine.mp3");
+    Sound clickSound = LoadSound("click.mp3");
+    Sound clickFlag = LoadSound("flag.wav");
+    Sound winSound = LoadSound("win.mp3");
+    float time1, time2;
+    char timestr[50];
+    time1 = GetTime();
+
     while (!WindowShouldClose())   
     {
-       
        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))   
        {
            Vector2 mousePos = GetMousePosition();
@@ -46,14 +54,23 @@ int main(void)
            if(grid[mouseI][mouseJ].flagged == false && grid[mouseI][mouseJ].revealed == false)
            {
                 grid[mouseI][mouseJ].revealed = true;
+                PlaySound(clickSound);
                 if(grid[mouseI][mouseJ].bomb == false)
                 {
                     revealedCount++;
                     if(revealedCount == 80)
+                    {
                         gamestate = 1;
+                        time2 = GetTime();
+                        TextFormat(timestr, 50, "Time is: %.2f", time2 - time1);
+                        PlaySound(winSound);
+                    }
                 }
                 if(grid[mouseI][mouseJ].bomb == true)
-                    gamestate = 0;
+                    {
+                        gamestate = 0;
+                        PlaySound(mineSound);
+                    }
            }
        }                
        else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))    
@@ -61,8 +78,11 @@ int main(void)
            Vector2 mousePos = GetMousePosition();
            int mouseI = mousePos.x / 50;
            int mouseJ = mousePos.y / 50; 
-           if(grid[mouseI][mouseJ].revealed == false)
-                  grid[mouseI][mouseJ].flagged = !grid[mouseI][mouseJ].flagged;
+           if(grid[mouseI][mouseJ].revealed == false)          
+            {
+                PlaySound(clickFlag);
+                grid[mouseI][mouseJ].flagged = !grid[mouseI][mouseJ].flagged;
+            }
        }
        
        
@@ -79,6 +99,7 @@ int main(void)
         {
             ClearBackground(DARKGREEN);
             DrawText("YOU WIN =D", 100, 220, 50, WHITE); 
+            
         }
         else
         {
@@ -94,7 +115,7 @@ int main(void)
         EndDrawing();
     }
 
-
+    CloseAudioDevice();
     CloseWindow();  
 
     
@@ -116,23 +137,6 @@ void revealCell(cell cell1)
             if(cell1.nearbyBombs == 0)
             {
                 DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, WHITE);
-                // for (int iOff = -1; iOff <= 1; iOff++)
-                // {
-                //     for (int jOff = -1; jOff <= 1; jOff++)
-                //     {
-                //         if (iOff == 0 && jOff == 0)
-                //         {
-                //             continue;
-                //         }
-
-                //         if (IndexIsValid(cell1.x + iOff, cell1.y + jOff))
-                //         {
-                //            revealCell(grid[cell1.x + iOff][cell1.y + jOff]);
-                //         }
-
-                        
-                //     }
-                // }                    
             }
             else if (cell1.nearbyBombs != 0)
             {    
@@ -190,7 +194,6 @@ void GridInitialize()
     int bombsToLaga = 20;
     while(bombsToLaga > 0)
     {
-        
         int i = rand() % 10;
         int j = rand() % 10;
         if (grid[i][j].bomb == false)
