@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
-
+ 
 typedef struct Cell
 {
 	int x;
@@ -40,6 +40,8 @@ int main(void)
     Sound clickSound = LoadSound("click.mp3");
     Sound clickFlag = LoadSound("flag.wav");
     Sound winSound = LoadSound("win.mp3");
+    float time1, time2;
+    time1 = GetTime();
 
     while (!WindowShouldClose())   
     {
@@ -55,9 +57,10 @@ int main(void)
                 if(grid[mouseI][mouseJ].bomb == false)
                 {
                     revealedCount++;
-                    if(revealedCount == 80)
+                    if(revealedCount == 1)
                     {
                         gamestate = 1;
+                        time2 = GetTime();
                         PlaySound(winSound);
                     }
                 }
@@ -88,13 +91,14 @@ int main(void)
         if(gamestate == 0)
         {  
             ClearBackground(MAROON);
-            DrawText("YOU LOSE =(", 100, 220, 50, WHITE); 
+            DrawText("YOU LOSE =/", 100, 220, 50, WHITE); 
         }
         else if(gamestate == 1)
         {
             ClearBackground(DARKGREEN);
             DrawText("YOU WIN =D", 100, 220, 50, WHITE); 
-            
+            DrawText(TextFormat("TIME PLAYED: %.2f s", time2-time1), 115, 280, 25, WHITE); 
+            DrawText(TextFormat("HIGH SCORE: %.2f s", time2-time1), 125, 315, 25, WHITE);           
         }
         else
         {
@@ -131,7 +135,7 @@ void revealCell(cell cell1)
         {
             if(cell1.nearbyBombs == 0)
             {
-                DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, WHITE);                   
+                DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, WHITE);
             }
             else if (cell1.nearbyBombs != 0)
             {    
