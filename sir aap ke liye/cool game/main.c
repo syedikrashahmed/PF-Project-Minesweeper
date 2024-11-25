@@ -131,24 +131,7 @@ void revealCell(cell cell1)
         {
             if(cell1.nearbyBombs == 0)
             {
-                DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, WHITE);
-                // for (int iOff = -1; iOff <= 1; iOff++)
-                // {
-                //     for (int jOff = -1; jOff <= 1; jOff++)
-                //     {
-                //         if (iOff == 0 && jOff == 0)
-                //         {
-                //             continue;
-                //         }
-
-                //         if (IndexIsValid(cell1.x + iOff, cell1.y + jOff))
-                //         {
-                //            revealCell(grid[cell1.x + iOff][cell1.y + jOff]);
-                //         }
-
-                        
-                //     }
-                // }                    
+                DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, WHITE);                   
             }
             else if (cell1.nearbyBombs != 0)
             {    
