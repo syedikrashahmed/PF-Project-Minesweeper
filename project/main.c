@@ -203,7 +203,6 @@ void GridInitialize()
         }
     }
     
-    //bombs idhar lagayen ge 
     int bombsToLaga = 20;
     while(bombsToLaga > 0)
     {
@@ -220,7 +219,7 @@ void GridInitialize()
     {
         for (int j = 0; j<10; j++)
         {
-            int count = 0; //grid ke har box ko check karte huey usska inital count will be 0
+            int count = 0; 
             if (grid[i][j].bomb == false)
             {
                 //if bomb nai hai, count aaju baaju waale tiles mei bombs
@@ -228,11 +227,11 @@ void GridInitialize()
                 {
                     for (int jOff = -1; jOff <= 1; jOff++)
                     {
-                        if (iOff == 0 && jOff == 0) //jis box ke around check kar rae hain, usse count nai karen ge
+                        if (iOff == 0 && jOff == 0) 
                         {
                             continue; 
                         }
-                        if (!IndexIsValid(i + iOff, j + jOff)) // function defined later to check ke index out of bounds tou nai hai
+                        if (!IndexIsValid(i + iOff, j + jOff)) 
                         {
                             continue;
                         }
