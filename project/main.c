@@ -222,7 +222,6 @@ void GridInitialize()
             int count = 0; 
             if (grid[i][j].bomb == false)
             {
-                //if bomb nai hai, count aaju baaju waale tiles mei bombs
                 for (int iOff = -1; iOff <= 1; iOff++)
                 {
                     for (int jOff = -1; jOff <= 1; jOff++)
