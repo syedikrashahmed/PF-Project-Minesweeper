@@ -97,7 +97,7 @@ int main(void)
         if(gamestate == 0)
         {  
             ClearBackground(MAROON);
-            DrawText("YOU LOSE =/", 100, 220, 50, WHITE); 
+            DrawText("YOU LOSE =(", 100, 220, 50, WHITE); 
         }
         else if(gamestate == 1)
         {
