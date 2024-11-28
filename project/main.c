@@ -114,7 +114,7 @@ int main(void)
             }         
             else
             {
-                DrawText(TextFormat("HIGHEST SCORE: %.2f s", highest), 115, 330, 25, WHITE); 
+                DrawText(TextFormat("HIGHEST SCORE: %.2f s", highest), 105, 330, 25, WHITE); 
 
             }
         }
