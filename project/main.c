@@ -38,7 +38,7 @@ int main(void)
 
     InitWindow(screenSize, screenSize, "MINESWEEPER");
   
-    int gamestate = 2; //2 =game chalra, 1 = win, 0 = lost
+    int gamestate = 2;
     int revealedCount = 0;
     srand(time(0));  
     GridInitialize();  
@@ -137,7 +137,6 @@ int main(void)
 
 void revealCell(cell cell1)
 {
-    //taake screen ke har pixel pe lines na banen, cell size ke gap se banen
     if (cell1.revealed == true && cell1.flagged == false)
     {
         if(cell1.bomb == true)
