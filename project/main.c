@@ -139,12 +139,7 @@ void revealCell(cell cell1)
 {
     if (cell1.revealed == true && cell1.flagged == false)
     {
-        if(cell1.bomb == true)
-        {
-            DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, MAROON);
-            
-        }
-        else if(cell1.bomb == false)
+        if(cell1.bomb == false)
         {
             if(cell1.nearbyBombs == 0)
             {
@@ -164,8 +159,6 @@ void revealCell(cell cell1)
     DrawRectangleLines(cell1.x*50, cell1.y*50, 50, 50, BLACK);
     
 }
-
-
 
 int IndexIsValid(int i, int j)
 {
@@ -187,8 +180,6 @@ void PrintFlag(int i, int j)
 //x and y is array position(row and column)
 void GridInitialize()
 {
-    
-    
     for(int i = 0; i < 10; i ++)
     {
         for (int j = 0; j < 10; j ++) 
