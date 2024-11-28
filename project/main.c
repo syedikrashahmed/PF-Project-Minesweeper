@@ -177,7 +177,6 @@ void PrintFlag(int i, int j)
     DrawLine((i * 50) + 11, (j * 50) + 30, (i * 50) + 11, (j * 50) + 45, BLACK);
 }
 
-//x and y is array position(row and column)
 void GridInitialize()
 {
     for(int i = 0; i < 10; i ++)
