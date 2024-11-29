@@ -25,6 +25,7 @@ int IndexIsValid(int i, int j);
 void GridInitialize();
 void revealCell(cell); 
 void PrintFlag(int i, int j);
+void displayBomb(int, int);
 
 int main(void)
 {
@@ -40,6 +41,7 @@ int main(void)
   
     int gamestate = 2;
     int revealedCount = 0;
+    int bombX, bombY;
     srand(time(0));  
     GridInitialize();  
     InitAudioDevice();
@@ -74,6 +76,8 @@ int main(void)
                 if(grid[mouseI][mouseJ].bomb == true)
                     {
                         gamestate = 0;
+                        bombX = mouseI;
+                        bombY = mouseJ;
                         PlaySound(mineSound);
                     }
            }
@@ -91,13 +95,14 @@ int main(void)
        }      
        
         BeginDrawing();
-
-        ClearBackground(LIGHTGRAY);
+        if (gamestate != 0)
+        {
+            ClearBackground(LIGHTGRAY);
+        }
         
         if(gamestate == 0)
         {  
-            ClearBackground(MAROON);
-            DrawText("YOU LOSE =(", 100, 220, 50, WHITE); 
+            displayBomb(bombX, bombY); 
         }
         else if(gamestate == 1)
         {
@@ -158,6 +163,30 @@ void revealCell(cell cell1)
     }
     DrawRectangleLines(cell1.x*50, cell1.y*50, 50, 50, BLACK);
     
+}
+
+void displayBomb(int bombX, int bombY)
+{
+    DrawRectangle(bombX*50, bombY*50, 49, 49, MAROON); 
+    for (int i=0; i<10; i++)
+    {
+        for (int j=0; j<10; j++)
+        {
+             if(grid[i][j].flagged == true && grid[i][j].bomb == false)
+             {
+                Vector2 lineStart1 = {i*50,j*50};
+                Vector2 lineEnd1 = {i*50 + 50,j*50 + 50};
+                DrawLineEx(lineStart1, lineEnd1, 2.0, BLACK);
+                Vector2 lineStart2 = {i*50,j*50 + 50};
+                Vector2 lineEnd2 = {i*50 + 50,j*50};
+                DrawLineEx(lineStart2, lineEnd2, 2.0, BLACK);
+             }
+             if(grid[i][j].flagged == false && grid[i][j].bomb == true)
+             {
+                DrawCircle(i*50 + 25, j*50 + 25, 15, BLACK);
+             }         
+        }
+    }
 }
 
 int IndexIsValid(int i, int j)
