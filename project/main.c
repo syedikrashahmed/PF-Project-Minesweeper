@@ -221,15 +221,15 @@ void GridInitialize()
         }
     }
     
-    int bombsToLaga = 20;
-    while(bombsToLaga > 0)
+    int bombsToPlace = 20;
+    while(bombsToPlace > 0)
     {
         int i = rand() % 10;
         int j = rand() % 10;
         if (grid[i][j].bomb == false)
         {
             grid[i][j].bomb = true;
-            bombsToLaga--;
+            bombsToPlace--;
         }
     }
     
