@@ -3,7 +3,7 @@
 #include <time.h>
 #include <stdlib.h>
  
-typedef struct
+typedef struct Cell
 {
 	int x;
 	int y;
@@ -15,8 +15,11 @@ typedef struct
 
 cell grid[10][10];
 
-// cellSize: 50
-// screenSize: 500
+int const cols = 10;
+int const rows = 10;
+
+const int cellSize = 50;
+const int screenSize = 500;
 
 int IndexIsValid(int i, int j);
 void GridInitialize();
@@ -34,7 +37,7 @@ int main(void)
     }
     fclose(fptr);
 
-    InitWindow(500, 500, "MINESWEEPER");
+    InitWindow(screenSize, screenSize, "MINESWEEPER");
   
     int gamestate = 2;
     int revealedCount = 0;
@@ -150,7 +153,27 @@ void revealCell(cell cell1)
             else if (cell1.nearbyBombs != 0)
             {    
                 DrawRectangle(cell1.x * 50, cell1.y * 50, 50, 50, WHITE);
-                DrawText(TextFormat("%d", cell1.nearbyBombs), cell1.x*50 + 18, cell1.y*50 + 12, 35, BLACK);
+                if (cell1.nearbyBombs == 1)
+                {
+                    DrawText(TextFormat("%d", cell1.nearbyBombs), cell1.x*50 + 16, cell1.y*50 + 10, 38, DARKBLUE);
+                }
+                else if (cell1.nearbyBombs == 2)
+                {
+                    DrawText(TextFormat("%d", cell1.nearbyBombs), cell1.x*50 + 16, cell1.y*50 + 10, 38, DARKGREEN);
+                }
+                else if (cell1.nearbyBombs == 3)
+                {
+                    DrawText(TextFormat("%d", cell1.nearbyBombs), cell1.x*50 + 16, cell1.y*50 + 10, 38, RED);
+                }
+                else if (cell1.nearbyBombs == 4)
+                {
+                    DrawText(TextFormat("%d", cell1.nearbyBombs), cell1.x*50 + 16, cell1.y*50 + 10, 38, DARKPURPLE);
+                }
+                else
+                {
+                    DrawText(TextFormat("%d", cell1.nearbyBombs), cell1.x*50 + 16, cell1.y*50 + 10, 38, BLACK);
+                }
+                  
             }
         }
     }
@@ -180,7 +203,34 @@ void displayBomb(int bombX, int bombY)
              }
              if(grid[i][j].flagged == false && grid[i][j].bomb == true)
              {
-                DrawCircle(i*50 + 25, j*50 + 25, 15, BLACK);
+                DrawCircle(i*50 + 25, j*50 + 25, 13, BLACK);
+                DrawCircle(i*50 + 22, j*50 + 22, 3, WHITE);
+                
+                Vector2 StartTop = {i*50 + 25, j*50 + 12};
+                Vector2 EndTop = {i*50 + 25, j*50 + 5};
+                DrawLineEx(StartTop, EndTop, 2.0, BLACK);
+                Vector2 StartBottom = {i*50 + 25, j*50 + 38};
+                Vector2 EndBottom = {i*50 + 25, j*50 + 45};
+                DrawLineEx(StartBottom, EndBottom, 2.0, BLACK);
+                Vector2 StartLeft = {i*50 + 12, j*50 + 25};
+                Vector2 EndLeft = {i*50 + 5, j*50 + 25};
+                DrawLineEx(StartLeft, EndLeft, 2.0, BLACK);
+                Vector2 StartRight = {i*50 + 38, j*50 + 25};
+                Vector2 EndRight = {i*50 +45, j*50 + 25};
+                DrawLineEx(StartRight, EndRight, 2.0, BLACK);
+                
+                Vector2 DStartTopRight = {i*50 + 34, j*50 + 15.5};
+                Vector2 DEndTopRight = {i*50 + 37, j*50 + 11.5};
+                DrawLineEx(DStartTopRight, DEndTopRight, 2.0, BLACK);
+                Vector2 DStartBottomRight = {i*50 + 34, j*50 + 34.5};
+                Vector2 DEndBottomRight = {i*50 + 37, j*50 + 38.5};
+                DrawLineEx(DStartBottomRight, DEndBottomRight, 2.0, BLACK);
+                Vector2 DStartTopLeft = {i*50 + 16, j*50 + 15.5};
+                Vector2 DEndTopLeft = {i*50 + 13, j*50 + 11.5};
+                DrawLineEx(DStartTopLeft, DEndTopLeft, 2.0, BLACK);
+                Vector2 DStartBottomLeft = {i*50 + 16, j*50 + 34.5};
+                Vector2 DEndBottomLeft = {i*50 + 13, j*50 + 38.5};
+                DrawLineEx(DStartBottomLeft, DEndBottomLeft, 2.0, BLACK);
              }         
         }
     }
