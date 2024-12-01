@@ -15,8 +15,8 @@ typedef struct
 
 cell grid[10][10];
 
-// cellSize: 50;
-// screenSize: 500;
+// cellSize: 50
+// screenSize: 500
 
 int IndexIsValid(int i, int j);
 void GridInitialize();
