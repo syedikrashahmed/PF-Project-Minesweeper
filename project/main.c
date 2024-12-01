@@ -15,11 +15,8 @@ typedef struct Cell
 
 cell grid[10][10];
 
-int const cols = 10;
-int const rows = 10;
-
-const int cellSize = 50;
-const int screenSize = 500;
+// cellSize: 50;
+// screenSize: 500;
 
 int IndexIsValid(int i, int j);
 void GridInitialize();
@@ -37,7 +34,7 @@ int main(void)
     }
     fclose(fptr);
 
-    InitWindow(screenSize, screenSize, "MINESWEEPER");
+    InitWindow(500, 500, "MINESWEEPER");
   
     int gamestate = 2;
     int revealedCount = 0;
