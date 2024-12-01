@@ -3,7 +3,7 @@
 #include <time.h>
 #include <stdlib.h>
  
-typedef struct Cell
+typedef struct
 {
 	int x;
 	int y;
