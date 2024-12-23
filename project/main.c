@@ -276,7 +276,7 @@ void GridInitialize()
         if (grid[i][j].bomb == false)
         {
             grid[i][j].bomb = true;
-            bombsToPlace--;
+            bombsToLaga--;
         }
     }
     
