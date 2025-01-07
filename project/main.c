@@ -54,46 +54,48 @@ int main(void)
 
     while (!WindowShouldClose())   
     {
-       if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))   
+       if (gamestate != 0)
        {
-           Vector2 mousePos = GetMousePosition();
-           int mouseI = mousePos.x / 50;
-           int mouseJ = mousePos.y / 50;  
-           if(grid[mouseI][mouseJ].flagged == false && grid[mouseI][mouseJ].revealed == false)
-           {
-                grid[mouseI][mouseJ].revealed = true;
-                PlaySound(clickSound);
-                if(grid[mouseI][mouseJ].bomb == false)
-                {
-                    revealedCount++;
-                    if(revealedCount == 80)
-                    {
-                        gamestate = 1;
-                        time2 = GetTime();
-                        PlaySound(winSound);
-                    }
-                }
-                if(grid[mouseI][mouseJ].bomb == true)
-                    {
-                        gamestate = 0;
-                        bombX = mouseI;
-                        bombY = mouseJ;
-                        PlaySound(mineSound);
-                    }
-           }
-       }                
-       else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))    
-       {
-           Vector2 mousePos = GetMousePosition();
-           int mouseI = mousePos.x / 50;
-           int mouseJ = mousePos.y / 50; 
-           if(grid[mouseI][mouseJ].revealed == false)          
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))   
             {
-                PlaySound(clickFlag);
-                grid[mouseI][mouseJ].flagged = !grid[mouseI][mouseJ].flagged;
-            }
-       }      
-       
+                Vector2 mousePos = GetMousePosition();
+                int mouseI = mousePos.x / 50;
+                int mouseJ = mousePos.y / 50;  
+                if(grid[mouseI][mouseJ].flagged == false && grid[mouseI][mouseJ].revealed == false)
+                {
+                        grid[mouseI][mouseJ].revealed = true;
+                        PlaySound(clickSound);
+                        if(grid[mouseI][mouseJ].bomb == false)
+                        {
+                            revealedCount++;
+                            if(revealedCount == 80)
+                            {
+                                gamestate = 1;
+                                time2 = GetTime();
+                                PlaySound(winSound);
+                            }
+                        }
+                        if(grid[mouseI][mouseJ].bomb == true)
+                            {
+                                gamestate = 0;
+                                bombX = mouseI;
+                                bombY = mouseJ;
+                                PlaySound(mineSound);
+                            }
+                }
+            }                
+            else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))    
+            {
+                Vector2 mousePos = GetMousePosition();
+                int mouseI = mousePos.x / 50;
+                int mouseJ = mousePos.y / 50; 
+                if(grid[mouseI][mouseJ].revealed == false)          
+                    {
+                        PlaySound(clickFlag);
+                        grid[mouseI][mouseJ].flagged = !grid[mouseI][mouseJ].flagged;
+                    }
+            }      
+       }
         BeginDrawing();
         if (gamestate != 0)
         {
