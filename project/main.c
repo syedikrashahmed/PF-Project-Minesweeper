@@ -39,7 +39,7 @@ int main(void)
 
     InitWindow(screenSize, screenSize, "MINESWEEPER");
   
-    int gamestate = 2;
+    int gamestate = 2; //0 is lose, 1 is win, 2 is game chalra
     int revealedCount = 0;
     int bombX, bombY;
     srand(time(0));  
@@ -54,48 +54,46 @@ int main(void)
 
     while (!WindowShouldClose())   
     {
-       if (gamestate != 0)
+       if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && gamestate != 0)   
        {
-            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))   
-            {
-                Vector2 mousePos = GetMousePosition();
-                int mouseI = mousePos.x / 50;
-                int mouseJ = mousePos.y / 50;  
-                if(grid[mouseI][mouseJ].flagged == false && grid[mouseI][mouseJ].revealed == false)
+           Vector2 mousePos = GetMousePosition();
+           int mouseI = mousePos.x / 50;
+           int mouseJ = mousePos.y / 50;  
+           if(grid[mouseI][mouseJ].flagged == false && grid[mouseI][mouseJ].revealed == false)
+           {
+                grid[mouseI][mouseJ].revealed = true;
+                PlaySound(clickSound);
+                if(grid[mouseI][mouseJ].bomb == false)
                 {
-                        grid[mouseI][mouseJ].revealed = true;
-                        PlaySound(clickSound);
-                        if(grid[mouseI][mouseJ].bomb == false)
-                        {
-                            revealedCount++;
-                            if(revealedCount == 80)
-                            {
-                                gamestate = 1;
-                                time2 = GetTime();
-                                PlaySound(winSound);
-                            }
-                        }
-                        if(grid[mouseI][mouseJ].bomb == true)
-                            {
-                                gamestate = 0;
-                                bombX = mouseI;
-                                bombY = mouseJ;
-                                PlaySound(mineSound);
-                            }
-                }
-            }                
-            else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))    
-            {
-                Vector2 mousePos = GetMousePosition();
-                int mouseI = mousePos.x / 50;
-                int mouseJ = mousePos.y / 50; 
-                if(grid[mouseI][mouseJ].revealed == false)          
+                    revealedCount++;
+                    if(revealedCount == 80)
                     {
-                        PlaySound(clickFlag);
-                        grid[mouseI][mouseJ].flagged = !grid[mouseI][mouseJ].flagged;
+                        gamestate = 1;
+                        time2 = GetTime();
+                        PlaySound(winSound);
                     }
-            }      
-       }
+                }
+                if(grid[mouseI][mouseJ].bomb == true)
+                    {
+                        gamestate = 0;
+                        bombX = mouseI;
+                        bombY = mouseJ;
+                        PlaySound(mineSound);
+                    }
+           }
+       }                
+       else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) && gamestate != 0)    
+       {
+           Vector2 mousePos = GetMousePosition();
+           int mouseI = mousePos.x / 50;
+           int mouseJ = mousePos.y / 50; 
+           if(grid[mouseI][mouseJ].revealed == false)          
+            {
+                PlaySound(clickFlag);
+                grid[mouseI][mouseJ].flagged = !grid[mouseI][mouseJ].flagged;
+            }
+       }      
+       
         BeginDrawing();
         if (gamestate != 0)
         {
@@ -105,6 +103,8 @@ int main(void)
         if(gamestate == 0)
         {  
             displayBomb(bombX, bombY); 
+            DrawRectangle(90, 210, 350, 60, GRAY);
+            DrawText("YOU LOST =(", 100, 220, 50, MAROON);
         }
         else if(gamestate == 1)
         {
@@ -204,35 +204,25 @@ void displayBomb(int bombX, int bombY)
                 DrawLineEx(lineStart2, lineEnd2, 2.0, BLACK);
              }
              if(grid[i][j].flagged == false && grid[i][j].bomb == true)
-             {
+             {                
+                Vector2 StartVertical = {i*50 + 25, j*50 + 6};
+                Vector2 EndVertical = {i*50 + 25, j*50 + 45};
+                DrawLineEx(StartVertical, EndVertical, 2.5, BLACK);
+                
+                Vector2 StartHorizontal = {i*50 + 6, j*50 + 25};
+                Vector2 EndHorizontal = {i*50 +45, j*50 + 25};
+                DrawLineEx(StartHorizontal, EndHorizontal, 2.5, BLACK);
+                
+                Vector2 StartSlash1 = {i*50 + 40, j*50 + 10.5};
+                Vector2 EndSlash1 = {i*50 + 13, j*50 + 38.5};
+                DrawLineEx(StartSlash1, EndSlash1, 2.3, BLACK);               
+                
+                Vector2 StartSlash2 = {i*50 + 10, j*50 + 10.5};
+                Vector2 EndSlash2 = {i*50 + 37, j*50 + 38.5};
+                DrawLineEx(StartSlash2, EndSlash2, 2.3, BLACK);
+                
                 DrawCircle(i*50 + 25, j*50 + 25, 13, BLACK);
                 DrawCircle(i*50 + 22, j*50 + 22, 3, WHITE);
-                
-                Vector2 StartTop = {i*50 + 25, j*50 + 12};
-                Vector2 EndTop = {i*50 + 25, j*50 + 5};
-                DrawLineEx(StartTop, EndTop, 2.0, BLACK);
-                Vector2 StartBottom = {i*50 + 25, j*50 + 38};
-                Vector2 EndBottom = {i*50 + 25, j*50 + 45};
-                DrawLineEx(StartBottom, EndBottom, 2.0, BLACK);
-                Vector2 StartLeft = {i*50 + 12, j*50 + 25};
-                Vector2 EndLeft = {i*50 + 5, j*50 + 25};
-                DrawLineEx(StartLeft, EndLeft, 2.0, BLACK);
-                Vector2 StartRight = {i*50 + 38, j*50 + 25};
-                Vector2 EndRight = {i*50 +45, j*50 + 25};
-                DrawLineEx(StartRight, EndRight, 2.0, BLACK);
-                
-                Vector2 DStartTopRight = {i*50 + 34, j*50 + 15.5};
-                Vector2 DEndTopRight = {i*50 + 37, j*50 + 11.5};
-                DrawLineEx(DStartTopRight, DEndTopRight, 2.0, BLACK);
-                Vector2 DStartBottomRight = {i*50 + 34, j*50 + 34.5};
-                Vector2 DEndBottomRight = {i*50 + 37, j*50 + 38.5};
-                DrawLineEx(DStartBottomRight, DEndBottomRight, 2.0, BLACK);
-                Vector2 DStartTopLeft = {i*50 + 16, j*50 + 15.5};
-                Vector2 DEndTopLeft = {i*50 + 13, j*50 + 11.5};
-                DrawLineEx(DStartTopLeft, DEndTopLeft, 2.0, BLACK);
-                Vector2 DStartBottomLeft = {i*50 + 16, j*50 + 34.5};
-                Vector2 DEndBottomLeft = {i*50 + 13, j*50 + 38.5};
-                DrawLineEx(DStartBottomLeft, DEndBottomLeft, 2.0, BLACK);
              }         
         }
     }
